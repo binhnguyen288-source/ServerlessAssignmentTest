@@ -49,9 +49,9 @@ extern "C" int __syscall_openat(int dirfd, intptr_t path, int flags, ...) {
        {"/dev/stdin", 0},
        {"/dev/stdout", 1},
        {"/dev/stderr", 2},
-       {"testcase.txt", 3},
-       {"expected.txt", 4},
-       {"got.txt", 5}
+       {"testcase", 3},
+       {"expected", 4},
+       {"got", 5}
    };
    int fd = MapFile2FD.at((const char*)path);
    signal_open(fd, flags != 32768);
@@ -60,11 +60,11 @@ extern "C" int __syscall_openat(int dirfd, intptr_t path, int flags, ...) {
 
 void printJS(const char* id, const char* str) {
     std::ofstream out(id);
-    out << str;
+    out << id << ":\n" << str;
 }
 
 int main() {
-    const char* filename = "testcase.txt";
+    const char* filename = "testcase";
     
     int const numtestcase = 10000;
     int i = 0;
@@ -74,10 +74,10 @@ int main() {
             out << get_test_case();
         }
         std::string expected = getExpected(filename) + "\nEnd here.";
-        printJS("expected.txt", expected.c_str());
+        printJS("expected", expected.c_str());
 
         std::string got = getGot(filename) + "\nEnd here.";
-        printJS("got.txt", got.c_str());
+        printJS("got", got.c_str());
         if (expected != got) {
             break;
         }
